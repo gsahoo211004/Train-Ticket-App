@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <h2>👋 Welcome, {{ request.user.first_name|default:request.user.username }}!</h2>
+  <p>What would you like to do today?</p>
+  <br>
+  <table>
+    <tr>
+      <td><a href="{% url 'profile' %}" class="btn">👤 Manage Profile</a></td>
+      <td>View and update your personal information and KYC documents.</td>
+    </tr>
+    <tr>
+      <td><a href="{% url 'wallet' %}" class="btn">💰 My Wallet</a></td>
+      <td>Check your balance and add money from saved sources.</td>
+    </tr>
+    <tr>
+      <td><a href="{% url 'bookings' %}" class="btn">🎫 My Bookings</a></td>
+      <td>View your past train reservations.</td>
+    </tr>
+  </table>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+  <h2>👤 Profile Management</h2>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h3>Personal Information</h3>
+    <p><label>First Name:</label>
+      <input type="text" name="first_name" value="{{ form.first_name.value|default:'' }}">
+    </p>
+    <p><label>Last Name:</label>
+      <input type="text" name="last_name" value="{{ form.last_name.value|default:'' }}">
+    </p>
+    <p><label>Email:</label>
+      <input type="email" name="email" value="{{ form.email.value|default:'' }}">
+    </p>
+    <p><label>Phone:</label>
+      <input type="text" name="phone" value="{{ form.phone.value|default:'' }}">
+    </p>
+    <p><label>Date of Birth:</label>
+      <input type="date" name="date_of_birth" value="{{ form.date_of_birth.value|default:'' }}">
+    </p>
+    <p><label>Address:</label>
+      <textarea name="address">{{ form.address.value|default:'' }}</textarea>
+    </p>
+    <h3>KYC Documents</h3>
+    {% if profile.id_proof %}
+      <p>✅ ID Proof: <a href="{{ profile.id_proof.url }}" target="_blank">View</a>
+        {% if profile.kyc_pending %}
+          <span class="badge-pending"> ⏳ Pending KYC</span>
+        {% elif profile.kyc_verified %}
+          <span class="badge-confirmed"> ✅ Verified</span>
+        {% endif %}
+      </p>
+    {% else %}
+      <p>⚠️ No ID Proof uploaded yet.</p>
+    {% endif %}
+    <p><label>Upload ID Proof:</label>
+      <input type="file" name="id_proof">
+    </p>
+    <p><label>Upload Address Proof:</label>
+      <input type="file" name="address_proof">
+    </p>
+    <button type="submit">💾 Save Profile</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Booking Detail{% endblock %}
+{% block content %}
+  <h2>🎫 Booking Details</h2>
+  <a href="{% url 'bookings' %}">← Back to Bookings</a>
+  <br><br>
+  <table>
+    <tr><th>Train Name</th><td>{{ booking.train_name }}</td></tr>
+    <tr><th>Train Number</th><td>{{ booking.train_number }}</td></tr>
+    <tr><th>From</th><td>{{ booking.source }}</td></tr>
+    <tr><th>To</th><td>{{ booking.destination }}</td></tr>
+    <tr><th>Journey Date</th><td>{{ booking.journey_date }}</td></tr>
+    <tr><th>Journey Time</th><td>{{ booking.journey_time }}</td></tr>
+    <tr><th>Passengers</th><td>{{ booking.passengers }}</td></tr>
+    <tr><th>Total Fare</th><td>₹{{ booking.total_fare }}</td></tr>
+    <tr><th>Status</th><td>{{ booking.get_status_display }}</td></tr>
+    <tr><th>Booked At</th><td>{{ booking.booked_at }}</td></tr>
+  </table>
+  <br>
+  <button disabled>❌ Cancel Booking (Sprint 2)</button>
+{% endblock %}

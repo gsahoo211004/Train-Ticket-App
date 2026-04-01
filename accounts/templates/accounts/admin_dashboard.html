@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+  <h2>🛡️ Admin Dashboard</h2>
+  <p>Manage all users and KYC approvals.</p>
+  <hr>
+  <table>
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>KYC Status</th>
+      <th>Action</th>
+    </tr>
+    {% for u in all_users %}
+    <tr>
+      <td>{{ u.username }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.profile.role|default:"user" }}</td>
+      <td>
+        {% if u.profile.kyc_verified %}
+          <span class="badge-confirmed">✅ Verified</span>
+        {% elif u.profile.kyc_pending %}
+          <span class="badge-pending">⏳ Pending</span>
+        {% else %}
+          <span style="color:grey">— Not Submitted</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if u.profile.kyc_pending and not u.profile.kyc_verified %}
+          <a href="{% url 'approve_kyc' u.id %}">✅ Approve KYC</a>
+        {% else %}
+          —
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

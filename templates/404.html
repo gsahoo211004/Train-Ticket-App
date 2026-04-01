@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Page Not Found{% endblock %}
+{% block content %}
+  <div style="text-align:center; padding: 40px;">
+    <h1 style="font-size:72px; color:#1a73e8;">404</h1>
+    <h2>Page Not Found</h2>
+    <p>The page you're looking for doesn't exist.</p>
+    <br>
+    <a href="{% url 'dashboard' %}" class="btn">🏠 Go Home</a>
+  </div>
+{% endblock %}
