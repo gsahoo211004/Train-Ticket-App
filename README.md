@@ -4,19 +4,6 @@ A full-stack web application for managing train ticket bookings, built with **Dj
 
 ---
 
-## 👥 Team
-
-| Name | Role |
-|------|------|
-| GAURAV SAHOO | Scrum Master |
-| R S SHREENIDHI | Product Owner |
-| R PRANNAV KARTHIKEYAN | Developer 1 (Backend) |
-| PRIYADHARSHINI B | Developer 2 (Frontend) |
-| ANBUCHELVAN S | Tester 1 |
-| MOHAMMED SAAD C | Tester 2 |
-
----
-
 ## 📋 Project Overview
 
 The Train Ticket Application is a web-based platform that allows users to search for trains, book tickets, manage reservations, and handle payments — similar to IRCTC. It includes a full admin panel for managing users and KYC approvals.
