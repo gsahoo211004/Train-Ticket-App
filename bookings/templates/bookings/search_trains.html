@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}Search Trains{% endblock %}
+{% block content %}
+
+  <h2>🔍 Search Trains</h2>
+  <a href="{% url 'bookings' %}">← Back to Bookings</a>
+  <hr>
+
+  <form method="GET" action="{% url 'search_trains' %}">
+    <table style="width:100%; border:none;">
+      <tr>
+        <td style="border:none; padding:6px;">
+          <label>From:</label>
+          <input type="text" name="source"
+            value="{{ form.source.value|default:'' }}"
+            placeholder="e.g. Chennai" required>
+        </td>
+        <td style="border:none; padding:6px;">
+          <label>To:</label>
+          <input type="text" name="destination"
+            value="{{ form.destination.value|default:'' }}"
+            placeholder="e.g. Bangalore" required>
+        </td>
+        <td style="border:none; padding:6px;">
+          <label>Date:</label>
+          <input type="date" name="journey_date"
+            value="{{ form.journey_date.value|default:'' }}" required>
+        </td>
+        <td style="border:none; padding:6px;">
+          <label>Class:</label>
+          <select name="travel_class">
+            <option value="">Any Class</option>
+            <option value="SL">Sleeper</option>
+            <option value="3A">AC 3 Tier</option>
+            <option value="2A">AC 2 Tier</option>
+            <option value="1A">AC First Class</option>
+          </select>
+        </td>
+        <td style="border:none; padding:6px;">
+          <label>Passengers:</label>
+          <input type="number" name="passengers"
+            value="{{ form.passengers.value|default:'1' }}"
+            min="1" max="6" style="width:70px;">
+        </td>
+        <td style="border:none; padding:6px; vertical-align:bottom;">
+          <button type="submit">🔍 Search</button>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <hr>
+
+  {% if searched %}
+    {% if trains %}
+      <h3>{{ trains|length }} Train(s) Found</h3>
+      <table>
+        <tr>
+          <th>Train</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Departure</th>
+          <th>Arrival</th>
+          <th>Class</th>
+          <th>Seats Available</th>
+          <th>Fare/Person</th>
+          <th>Total Fare</th>
+          <th>Action</th>
+        </tr>
+        {% for train in trains %}
+        <tr>
+          <td>{{ train.train_number }}<br><small>{{ train.train_name }}</small></td>
+          <td>{{ train.source }}</td>
+          <td>{{ train.destination }}</td>
+          <td>{{ train.departure_time }}</td>
+          <td>{{ train.arrival_time }}</td>
+          <td>{{ train.get_travel_class_display }}</td>
+          <td>{{ train.available_seats }}</td>
+          <td>₹{{ train.fare_per_person }}</td>
+          <td>₹{{ train.fare_per_person }} × {{ passengers }} =
+            <strong>₹{% widthratio train.fare_per_person 1 passengers %}</strong>
+          </td>
+          <td>
+  <a href="{% url 'book_train' train.id %}?date={{ journey_date }}&passengers={{ passengers }}"
+     class="btn" style="padding:6px 12px; font-size:13px;">
+    Book Now
+  </a>
+</td>
+        </tr>
+        {% endfor %}
+      </table>
+
+    {% else %}
+      <p style="color:gray; text-align:center; padding:40px;">
+        No trains found for the selected route and date.
+      </p>
+    {% endif %}
+  {% else %}
+    <p style="color:gray; text-align:center; padding:40px;">
+      Enter your journey details above and click Search.
+    </p>
+  {% endif %}
+
+{% endblock %}

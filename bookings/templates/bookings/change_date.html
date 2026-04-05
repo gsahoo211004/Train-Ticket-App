@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Change Journey Date{% endblock %}
+{% block content %}
+
+  <h2>📅 Change Journey Date</h2>
+  <a href="{% url 'booking_detail' booking.id %}">← Back to Booking</a>
+  <hr>
+
+  <table>
+    <tr><th>Booking ID</th><td>#{{ booking.id }}</td></tr>
+    <tr><th>Train</th><td>{{ booking.train_number }} — {{ booking.train_name }}</td></tr>
+    <tr><th>From</th><td>{{ booking.source }}</td></tr>
+    <tr><th>To</th><td>{{ booking.destination }}</td></tr>
+    <tr><th>Current Date</th>
+      <td><strong style="color:#dc3545;">{{ booking.journey_date }}</strong></td>
+    </tr>
+    {% if booking.train %}
+    <tr><th>Available Days</th><td>{{ booking.train.days_available }}</td></tr>
+    {% endif %}
+  </table>
+
+  <br>
+  <h3>Select New Journey Date</h3>
+
+  <form method="POST">
+    {% csrf_token %}
+    <p>
+      <label><strong>New Date:</strong></label><br>
+      <input type="date" name="new_date" required
+        min="{{ today|date:'Y-m-d' }}"
+        style="width:250px; padding:8px; font-size:16px;">
+    </p>
+    <br>
+    <button type="submit">📅 Confirm Date Change</button>
+    &nbsp;&nbsp;
+    <a href="{% url 'booking_detail' booking.id %}"
+       style="padding:10px 24px; background:#6c757d; color:white;
+              border-radius:4px; text-decoration:none;">
+      Cancel
+    </a>
+  </form>
+
+{% endblock %}

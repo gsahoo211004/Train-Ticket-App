@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Book Train{% endblock %}
+{% block content %}
+
+  <h2>🎫 Book Your Ticket</h2>
+  <a href="{% url 'search_trains' %}">← Back to Search</a>
+  <hr>
+
+  <h3>Train Details</h3>
+  <table>
+    <tr><th>Train</th><td>{{ train.train_number }} — {{ train.train_name }}</td></tr>
+    <tr><th>From</th><td>{{ train.source }}</td></tr>
+    <tr><th>To</th><td>{{ train.destination }}</td></tr>
+    <tr><th>Departure</th><td>{{ train.departure_time }}</td></tr>
+    <tr><th>Arrival</th><td>{{ train.arrival_time }}</td></tr>
+    <tr><th>Class</th><td>{{ train.get_travel_class_display }}</td></tr>
+    <tr><th>Journey Date</th><td>{{ journey_date }}</td></tr>
+    <tr><th>Passengers</th><td>{{ passengers }}</td></tr>
+    <tr><th>Fare per Person</th><td>₹{{ train.fare_per_person }}</td></tr>
+    <tr>
+      <th>Total Fare</th>
+      <td><strong style="color:#1a73e8; font-size:1.2em;">₹{{ total_fare }}</strong></td>
+    </tr>
+  </table>
+
+  <hr>
+  <h3>💳 Payment</h3>
+
+  <!-- Partial payment notice -->
+  {% if use_partial %}
+  <div style="background:#fff3cd; border-left:5px solid #ffc107;
+              padding:14px; border-radius:4px; margin-bottom:16px;">
+    <strong>⚠️ Partial Wallet Payment Available</strong>
+    <p style="margin-top:6px;">
+      Your wallet has <strong>₹{{ wallet_contribution }}</strong> —
+      not enough for the full fare of <strong>₹{{ total_fare }}</strong>.<br>
+      You can use your wallet balance + pay the remaining
+      <strong>₹{{ remaining }}</strong> from another source.
+    </p>
+  </div>
+  {% endif %}
+
+  <p>💰 Wallet Balance:
+    <strong style="color:{% if wallet.balance >= total_fare %}green{% else %}red{% endif %}">
+      ₹{{ wallet.balance }}
+    </strong>
+  </p>
+
+  <form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="journey_date" value="{{ journey_date }}">
+    <input type="hidden" name="passengers" value="{{ passengers }}">
+
+    <!-- Full wallet payment -->
+    <p>
+      <label>
+        <input type="radio" name="payment_method" value="wallet"
+          {% if wallet.balance >= total_fare %}checked{% endif %}
+          {% if wallet.balance < total_fare %}disabled{% endif %}>
+        💰 Pay fully from Wallet (₹{{ wallet.balance }})
+        {% if wallet.balance < total_fare %}
+          <span style="color:red;"> — Insufficient</span>
+        {% endif %}
+      </label>
+    </p>
+
+    <!-- Partial wallet + another source -->
+    {% if use_partial %}
+    <div style="background:#f8f9fa; padding:14px; border-radius:6px;
+                border:1px solid #dee2e6; margin:10px 0;">
+      <p><strong>Use partial wallet + another source:</strong></p>
+      <p>
+        <input type="checkbox" name="use_wallet_partial" id="use_wallet_partial" checked>
+        <label for="use_wallet_partial">
+          Use ₹{{ wallet_contribution }} from wallet +
+          pay remaining ₹{{ remaining }} from:
+        </label>
+      </p>
+      <p style="margin-left:24px;">
+        <label>
+          <input type="radio" name="payment_method" value="savings" checked>
+          🏦 Savings Account
+        </label>
+      </p>
+      <p style="margin-left:24px;">
+        <label>
+          <input type="radio" name="payment_method" value="credit">
+          💳 Credit Card
+        </label>
+      </p>
+    </div>
+    {% endif %}
+
+    <!-- Full payment from other source -->
+    <p><strong>Or pay fully from:</strong></p>
+    <p>
+      <label>
+        <input type="radio" name="payment_method" value="savings"
+          {% if not use_partial and wallet.balance < total_fare %}checked{% endif %}>
+        🏦 Savings Account (Full amount: ₹{{ total_fare }})
+      </label>
+    </p>
+    <p>
+      <label>
+        <input type="radio" name="payment_method" value="credit">
+        💳 Credit Card (Full amount: ₹{{ total_fare }})
+      </label>
+    </p>
+
+    <br>
+    <button type="submit">✅ Confirm Booking — ₹{{ total_fare }}</button>
+  </form>
+
+{% endblock %}

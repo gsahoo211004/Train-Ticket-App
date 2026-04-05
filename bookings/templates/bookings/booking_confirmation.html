@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Booking Confirmed{% endblock %}
+{% block content %}
+
+  <div style="text-align:center; padding: 20px;">
+    <h1 style="color:green; font-size:3em;">✅</h1>
+    <h2 style="color:green;">Booking Confirmed!</h2>
+    <p style="font-size:1.1em;">Your booking ID is <strong>#{{ booking.id }}</strong></p>
+    <hr>
+  </div>
+
+  <h3>Booking Summary</h3>
+  <table>
+    <tr><th>Booking ID</th><td>#{{ booking.id }}</td></tr>
+    <tr><th>Train</th><td>{{ booking.train_number }} — {{ booking.train_name }}</td></tr>
+    <tr><th>From</th><td>{{ booking.source }}</td></tr>
+    <tr><th>To</th><td>{{ booking.destination }}</td></tr>
+    <tr><th>Journey Date</th><td>{{ booking.journey_date }}</td></tr>
+    <tr><th>Departure Time</th><td>{{ booking.journey_time }}</td></tr>
+    <tr><th>Passengers</th><td>{{ booking.passengers }}</td></tr>
+    <tr><th>Class</th><td>{{ booking.travel_class }}</td></tr>
+    <tr><th>Total Fare Paid</th><td><strong>₹{{ booking.total_fare }}</strong></td></tr>
+    <tr><th>Payment Method</th><td>{{ booking.payment_method|title }}</td></tr>
+    <tr><th>Status</th><td><span style="color:green;">✅ Confirmed</span></td></tr>
+  </table>
+
+  <br>
+  <div style="text-align:center;">
+    <a href="{% url 'feedback' booking.id %}" class="btn"
+       style="background:#ffc107; color:#000;">
+      ⭐ Rate Your Experience
+    </a>
+    &nbsp;&nbsp;
+    <a href="{% url 'bookings' %}" class="btn">📋 View All Bookings</a>
+    &nbsp;&nbsp;
+    <a href="{% url 'search_trains' %}" class="btn">➕ Book Another Train</a>
+  </div>
+
+{% endblock %}
